@@ -45,8 +45,6 @@ public class Gameboard15 extends JPanel
       this.count = 0;
       if(difficulty == 0){
          this.maxDepth = 1;
-      } else if(difficulty == 1){
-         this.maxDepth = 5;
       } else{
          this.maxDepth = Integer.MAX_VALUE;
       }
@@ -149,9 +147,8 @@ public class Gameboard15 extends JPanel
    }
    private int minmax(int[][] board, int depth, boolean isMax) {
       int state = this.gameState(board);
-      if(depth > maxDepth){
-         return state;
-      }
+      if(depth >= this.maxDepth)
+         return 0;
       if(state == 10 || state == -10)
          return state + depth*(state / 10);
       if(this.noMovesLeft(board))
