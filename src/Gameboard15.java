@@ -145,7 +145,7 @@ public class Gameboard15 extends JPanel
       }
       return 0;
    }
-   private int minmax(int[][] board, int depth, boolean isMax) {
+   private int minmax(int[][] board, int depth, boolean isMax, int alpha, int beta) {
       int state = this.gameState(board);
       if(depth >= this.maxDepth)
          return 0;
@@ -160,8 +160,12 @@ public class Gameboard15 extends JPanel
             for(int j=0;j<3;j++){
                if(board[i][j] == this.EMPTY){
                   board[i][j] = this.COMPUTER;
-                  max = Math.max(max, this.minmax(board, depth+1, false));
+                  max = Math.max(max, this.minmax(board, depth+1, false, alpha, beta));
                   board[i][j] = this.EMPTY;
+                  alpha = Math.max(alpha, max);
+                  if(beta <= alpha){
+                     break;
+                  }
                }
             }
          }
@@ -172,8 +176,12 @@ public class Gameboard15 extends JPanel
             for(int j=0;j<3;j++){
                if(board[i][j] == this.EMPTY){
                   board[i][j] = this.PLAYER;
-                  min = Math.min(min, this.minmax(board, depth+1, true));
+                  min = Math.min(min, this.minmax(board, depth+1, true, alpha, beta));
                   board[i][j] = this.EMPTY;
+                  beta = Math.min(min, beta);
+                  if(beta <= alpha){
+                     break;
+                  }
                }
             }
          }
@@ -188,7 +196,7 @@ public class Gameboard15 extends JPanel
          for(int j=0;j<3;j++){
             if(this.game[i][j] == this.EMPTY){
                this.game[i][j] = this.COMPUTER;
-               int move = this.minmax(game, 0, false);
+               int move = this.minmax(game, 0, false, Integer.MIN_VALUE, Integer.MAX_VALUE);
                this.game[i][j] = this.EMPTY;
                if(move > max){
                   best.x = i;
